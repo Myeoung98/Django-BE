@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+
+python manage.py migrate
+
+cmd_initializer_reminder="python initializer.py"
+echo "$cmd_initializer_reminder"
+eval $cmd_initializer_reminder
+
+exec uvicorn config.asgi:application --host 0.0.0.0 --reload --reload-include '*.html'
